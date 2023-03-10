@@ -1,0 +1,181 @@
+--loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/NOOBHUBX/Location/main/NOOB%20HUB.Lua"))()
+
+function Tween(Point)
+local TweenService = game:GetService("TweenService")
+local Tw = TweenService:Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(250/250, Enum.EasingStyle.Linear, Enum.EasingDirection.Out,0,false,0), 
+{CFrame = Point}):Play()
+if (Point.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 150 then
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
+end
+end
+
+function CQ()
+	local MYL = game:GetService("Players").LocalPlayer.Data.Level.Value
+	if MYL == 1 or MYL <= 10 then
+		NM = "Bandit [Lv. 5]"
+		NMQ = "Bandit"
+		QN = "BanditQuest1"
+		Ql = 1
+		CFrameQ = CFrame.new(1060.9967041015625, 16.455074310302734, 1547.9398193359375)
+	end
+end
+
+AUTOFARM = true
+BRINGMS = true
+
+spawn(function()
+	while wait() do
+		pcall(function()
+			if AUTOFARM then
+				if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
+					CQ()
+					Tween(CFrameQ)
+					wait(1.5)
+					local args = {
+    					[1] = "StartQuest",
+  					  [2] = QN,
+  					  [3] = Ql
+					}
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer(unpack(args))
+				elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
+				CQ()
+					for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+						if v.Name == NM and v.Humanoid.Health > 0 then
+							repeat wait()
+								BRINGMSS = true
+								PosMon = v.HumanoidRootPart.CFrame
+								v.HumanoidRootPart.CanCollide = false
+								v.Humanoid.WalkSpeed = 0
+								v.Head.CanCollide = false
+								v.HumanoidRootPart.Size = Vector3.new(60,60,60)
+								Tween(v.HumanoidRootPart.CFrame * CFrame.new(0,0,6))
+								game:GetService'VirtualUser':CaptureController()
+								game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+							until not AUTOFARM or v.Humanoid.Health < 0 or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
+						end
+					end
+				end
+				CQ()
+				if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NMQ) then
+					local args = {
+						[1] = "AbandonQuest"
+					}
+            		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        	    end
+			end
+		end )
+	end
+end)
+
+spawn(function()
+	while wait() do
+		pcall(function()
+			if BRINGMS then
+				CQ()
+                for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                   if AUTOFARM and BRINGMSS and v.Name == NM and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 220 then
+                       v.HumanoidRootPart.Size = Vector3.new(80,80,80)
+                       v.HumanoidRootPart.CFrame = PosMon
+                       v.HumanoidRootPart.CanCollide = false
+                       v.Head.CanCollide = false
+                       v.Humanoid.JumpPower = 0
+				       v.Humanoid.WalkSpeed = 0
+                       sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
+                   elseif AUTOFARM and BRINGMSS and v.Name == NM and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 220 then
+                       v.HumanoidRootPart.Size = Vector3.new(80,80,80)
+                       v.HumanoidRootPart.CFrame = PosMon
+                       v.HumanoidRootPart.CanCollide = false
+                       v.Head.CanCollide = false
+                       v.Humanoid.JumpPower = 0
+					   v.Humanoid.WalkSpeed = 0
+                       sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
+                    end
+                end
+			end
+		end)
+	end
+end)
+
+(getgenv()).Config = {
+ ["FastAttack"] = true,
+ ["ClickAttack"] = true
+} 
+
+coroutine.wrap(function()
+local StopCamera = require(game.ReplicatedStorage.Util.CameraShaker)StopCamera:Stop()
+    for v,v in pairs(getreg()) do
+        if typeof(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerScripts.CombatFramework then
+             for v,v in pairs(debug.getupvalues(v)) do
+                if typeof(v) == "table" then
+                    spawn(function()
+                        game:GetService("RunService").RenderStepped:Connect(function()
+                            if getgenv().Config['FastAttack'] then
+                                 pcall(function()
+                                     v.activeController.timeToNextAttack = -(math.huge^math.huge^math.huge)
+                                     v.activeController.attacking = false
+                                     v.activeController.increment = 4
+                                     v.activeController.blocking = false   
+                                     v.activeController.hitboxMagnitude = 150
+    		                         v.activeController.humanoid.AutoRotate = true
+    	                      	     v.activeController.focusStart = 0
+    	                      	     v.activeController.currentAttackTrack = 0
+                                     sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRaxNerous", math.huge)
+                                 end)
+                             end
+                         end)
+                    end)
+                end
+            end
+        end
+    end
+end)();
+
+spawn(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if getgenv().Config['ClickAttack'] then
+             pcall(function()
+                game:GetService'VirtualUser':CaptureController()
+			    game:GetService'VirtualUser':Button1Down(Vector2.new(0,1,0,1))
+            end)
+        end
+    end)
+end)
+
+local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = false
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(g:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    end
+end
+for i, e in pairs(l:GetChildren()) do
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
